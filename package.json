@@ -1,7 +1,8 @@
 {
   "name": "rn-jitsi-meet",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/features/lib-jitsi-meet/index",
+  "module": "src/features/lib-jitsi-meet/index",
   "repository": "git@github.com-icc:icc-guerrero/rn-jitsi-meet.git",
   "author": "Andres GUERRERO <guerrero@unicc.org>",
   "license": "MIT"

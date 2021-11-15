@@ -1,5 +1,6 @@
 // Re-export JitsiMeetJS from the library lib-jitsi-meet to (the other features
 // of) the project jitsi-meet.
+import './polyfills';
 import JitsiMeetJS from './_';
 export {JitsiMeetJS as default};
 
@@ -23,3 +24,5 @@ export const JitsiRecordingConstants = JitsiMeetJS.constants.recording;
 export const JitsiSIPVideoGWStatus = JitsiMeetJS.constants.sipVideoGW;
 export const JitsiTrackErrors = JitsiMeetJS.errors.track;
 export const JitsiTrackEvents = JitsiMeetJS.events.track;
+
+export {default as JitsiComponent} from './JitsiComponent';

@@ -15,6 +15,12 @@ Pod::Spec.new do |s|
   s.source       = { :git => "", :tag => "v#{s.version}" }
   s.source_files  = "ios/**/*.{h,m,swift}"
 
-  s.dependency 'React'
-  s.dependency 'react-native-webrtc'
+  s.libraries           = 'c', 'sqlite3', 'stdc++'
+  s.framework           = 'AudioToolbox','AVFoundation', 'CoreAudio', 'CoreGraphics', 'CoreVideo', 'GLKit', 'VideoToolbox'
+  s.ios.vendored_frameworks = '../react-native-webrtc/ios/WebRTC.framework'
+  s.xcconfig            = { 'OTHER_LDFLAGS' => '-framework WebRTC' }
+  s.dependency          'React'
 end
+
+
+

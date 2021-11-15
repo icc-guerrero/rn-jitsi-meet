@@ -5,5 +5,8 @@
   "module": "src/features/lib-jitsi-meet/index",
   "repository": "git@github.com-icc:icc-guerrero/rn-jitsi-meet.git",
   "author": "Andres GUERRERO <guerrero@unicc.org>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "postinstall": "cd node_modules/lib-jitsi-meet && npm install && $(npm bin)/webpack -p && cd ../.."
+  }
 }

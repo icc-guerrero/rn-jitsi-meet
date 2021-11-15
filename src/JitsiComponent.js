@@ -2,7 +2,7 @@ import JitsiMeetJS, {
   JitsiConferenceEvents,
   JitsiConnectionQualityEvents,
   JitsiConnectionEvents,
-} from './';
+} from './index';
 
 import React, {useEffect, useState} from 'react';
 import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
@@ -325,5 +325,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-export JitsiComponent from './JitsiComponent';
+export default JitsiComponent;

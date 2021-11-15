@@ -7,7 +7,7 @@
   "author": "Andres GUERRERO <guerrero@unicc.org>",
   "license": "MIT",
   "scripts": {
-    "postinstall": "cd node_modules/lib-jitsi-meet && npm install && $(npm bin)/webpack -p && cd ../.."
+    "postinstall": "cd ../lib-jitsi-meet && npm install && $(npm bin)/webpack -p && cd ../.."
   },
   "dependencies": {
     "lib-jitsi-meet": "git+https://github.com/icc-guerrero/lib-jitsi-meet.git#rn-test"

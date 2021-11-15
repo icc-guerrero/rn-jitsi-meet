@@ -3,9 +3,9 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 Pod::Spec.new do |s|
-  s.name         = ReactJitsi
+  s.name         = 'ReactJitsi'
   s.version      = package['version']
-  s.summary      = 'Summary'
+  s.summary      = 'React Native Jitsi module'
   s.license      = package['license']
 
   s.authors      = package['author']

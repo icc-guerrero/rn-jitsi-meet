@@ -3,7 +3,7 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 Pod::Spec.new do |s|
-  s.name         = 'ReactJitsi'
+  s.name         = 'React-Jitsi'
   s.version      = package['version']
   s.summary      = 'React Native Jitsi module'
   s.license      = package['license']
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 
   s.libraries           = 'c', 'sqlite3', 'stdc++'
   s.framework           = 'AudioToolbox','AVFoundation', 'CoreAudio', 'CoreGraphics', 'CoreVideo', 'GLKit', 'VideoToolbox'
-  s.ios.vendored_frameworks = '../react-native-webrtc/ios/WebRTC.framework'
+  s.ios.vendored_frameworks = 'ios/WebRTC.framework'
   s.xcconfig            = { 'OTHER_LDFLAGS' => '-framework WebRTC' }
   s.dependency          'React'
 end

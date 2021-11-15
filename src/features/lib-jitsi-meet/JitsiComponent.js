@@ -326,4 +326,4 @@ const styles = StyleSheet.create({
   },
 });
 
-
+export JitsiComponent from './JitsiComponent';

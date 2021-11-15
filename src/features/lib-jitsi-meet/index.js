@@ -25,4 +25,4 @@ export const JitsiSIPVideoGWStatus = JitsiMeetJS.constants.sipVideoGW;
 export const JitsiTrackErrors = JitsiMeetJS.errors.track;
 export const JitsiTrackEvents = JitsiMeetJS.events.track;
 
-export {default as JitsiComponent} from './JitsiComponent';
+

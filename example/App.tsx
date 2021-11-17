@@ -7,7 +7,6 @@
  *
  * @format
  */
-console.log('AAAA');
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import JitsiComponent from 'rn-jitsi-meet';
@@ -15,7 +14,11 @@ import JitsiComponent from 'rn-jitsi-meet';
 const App = () => {
   return (
     <View style={styles.container}>
-      <JitsiComponent room={'thisismyjitsitest999'} />
+      <JitsiComponent
+        roomId={'thisismyjitsitest999'}
+        roomName={'My conference'}
+        displayName={'Andrés'}
+      />
     </View>
   );
 };

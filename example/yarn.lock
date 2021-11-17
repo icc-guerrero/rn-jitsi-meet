@@ -5904,6 +5904,20 @@ rimraf@~2.6.2:
     react-native-url-polyfill "1.2.0"
     xmldom "0.1.27"
 
+"rn-jitsi-meet@file:../":
+  version "1.0.0"
+  dependencies:
+    jQuery-Impromptu "github:trentrichardson/jQuery-Impromptu#v6.0.0"
+    jitsi-meet-logger "github:jitsi/jitsi-meet-logger#5ec92357570dc8f0b7ffc1528820721c84c6af8b"
+    jquery "3.5.1"
+    jquery-contextmenu "2.4.5"
+    jquery-i18next "1.2.1"
+    lib-jitsi-meet thiagobrez/lib-jitsi-meet.git
+    react-native-callstats "3.61.0"
+    react-native-progress "^5.0.0"
+    react-native-url-polyfill "1.2.0"
+    xmldom "0.1.27"
+
 rsvp@^4.8.4:
   version "4.8.5"
   resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-4.8.5.tgz#c8f155311d167f68f21e168df71ec5b083113734"

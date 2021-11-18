@@ -7,17 +7,20 @@
   "author": "Andres GUERRERO <guerrero@unicc.org>",
   "license": "MIT",
   "scripts": {
-    "postinstall": "cd ../lib-jitsi-meet && npm install && $(npm bin)/webpack -p && cd ../..",
-    "cleanup": "rm -rf ./example/node_modules && rm -rf ./example/ios/Pods && rm -rf ./example/Podfile.lock"
+    "postinstall": "cd ../lib-jitsi-meet && npm install && $(npm bin)/webpack -p && cd ../.."
   },
   "peerDependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.11",
     "react": "*",
     "react-native": "*",
-    "@react-native-async-storage/async-storage": "^1.15.11",
     "react-native-background-timer": "^2.4.0",
     "react-native-svg": "^12.1.1",
     "react-native-video": "^5.2.0",
     "react-native-webrtc": "1.84.0"
+  },
+  "devDependencies": {
+    "react": "17.0.2",
+    "react-native": "0.66.3"
   },
   "dependencies": {
     "jQuery-Impromptu": "github:trentrichardson/jQuery-Impromptu#v6.0.0",

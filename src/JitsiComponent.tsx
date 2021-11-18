@@ -9,7 +9,10 @@ import {Button, Pressable, StyleSheet, Text, TextInput, View} from 'react-native
 import RTCView from 'react-native-webrtc/RTCView';
 import Timer from './Timer'
 import * as Progress from 'react-native-progress';
-import Styles from './Styles'
+import Styles from './Styles';
+import Phone from './components/Phone';
+import Camera from './components/Camera';
+import Microphone from './components/Microphone';
 
 const status = {
   INIT: 0,
@@ -26,6 +29,9 @@ interface JitsiComponentProps {
   muc?: string;
   token?: string;
 }
+
+let room : any;
+let connection : any;
 
 const JitsiComponent = (props:JitsiComponentProps) => {
   const domain = props.domain || 'beta.meet.jit.si'
@@ -45,11 +51,10 @@ const JitsiComponent = (props:JitsiComponentProps) => {
   const [roomId, setRoomId] = useState(props.roomId);
   const [conferenceStatus, setConferenceStatus] = useState(status.INIT);
   const roomName = props.roomName || 'Conference';
-
+  const [localTracks, setLocalTracks] = useState([]);
+  const [remoteTracks, setRemoteTracks]= useState([]);
 
   useEffect(() => {
-    let connection = null;
-    let room = null;
     JitsiMeetJS.init(initOptions);
     JitsiMeetJS.setLogLevel(JitsiMeetJS.logLevels.ERROR);
   }, [initOptions]);
@@ -64,13 +69,58 @@ const JitsiComponent = (props:JitsiComponentProps) => {
     }, [roomId]
   )
 
+  const renderInConference = () => {
+    return  (
+      <>
+        <View style={[Styles.conferenceContainer,Styles.centered]}>
+          <View style={[Styles.conferenceInfo, Styles.centered]}>
+            <Text style={[Styles.white]}>{roomName}</Text>
+            <Text style={[Styles.white]}><Timer></Timer></Text>
+          </View>
+        </View>
+        <View style={Styles.buttonsArea}>
+          <Pressable style={Styles.roundButton}><Microphone/></Pressable>
+          <Pressable
+            style={[Styles.roundButton, Styles.leaveButton]}
+            onPress={disconnect}
+            disabled={conferenceStatus === status.DISCONNECTED}
+          ><Phone/></Pressable>
+          <Pressable style={Styles.roundButton}><Camera/></Pressable>
+        </View>
+      </>
+    )
+  }
+  const renderConnectWindow = () => {
+    return (<View style={[{flex: 1},Styles.centered]}>
+      <View style={[Styles.joinContainer,Styles.centered]}>
+        <Text>Enter Room ID</Text>
+        <TextInput
+          style={Styles.textInput}
+          onChangeText={setRoomId}
+          placeholder="room id"
+          placeholderTextColor="gray"
+          value={roomId}
+        />
+        <Pressable style={Styles.button} onPress={connect} disabled={
+          conferenceStatus === status.CONNECTING ||
+          conferenceStatus === status.CONNECTED
+        }>
+          <Text style={Styles.buttonText}>Join</Text>
+        </Pressable>
+      </View>
+    </View>)
+  }
 
+  const toggleLocalVideoPosition = () => {
+
+  }
   const connect = () => {
     setConferenceStatus(status.CONNECTING);
-    navigator.mediaDevices.enumerateDevices().then(sourceInfos => {
+
+    navigator.mediaDevices.enumerateDevices().then((sourceInfos: any) => {
       console.log('sourceInfos', sourceInfos);
 
-      navigator.mediaDevices.getUserMedia({audio: true}).then(stream => {
+      navigator.mediaDevices.getUserMedia({audio: true}).then((stream: any) => {
         console.log('stream', stream);
 
         connection = new JitsiMeetJS.JitsiConnection(null, null, initOptions);
@@ -78,12 +128,12 @@ const JitsiComponent = (props:JitsiComponentProps) => {
 
         connection.addEventListener(
           JitsiConnectionEvents.CONNECTION_ESTABLISHED,
-          event => onConnectionEstablished(event, roomId),
+          (event: any) => onConnectionEstablished(event, roomId),
         );
 
         connection.addEventListener(
           JitsiConnectionEvents.CONNECTION_FAILED,
-          event => onConnectionFailed(event),
+          (event: any) => onConnectionFailed(event),
         );
 
         connection.addEventListener(
@@ -100,6 +150,8 @@ const JitsiComponent = (props:JitsiComponentProps) => {
     connection.disconnect();
     setVideoURL(null);
     setLocalVideoURL(null);
+    setLocalTracks([]);
+    setRemoteTracks([]);
 
     connection.removeEventListener(
       JitsiConnectionEvents.CONNECTION_ESTABLISHED,
@@ -130,20 +182,29 @@ const JitsiComponent = (props:JitsiComponentProps) => {
       onConferenceJoined(),
     );
     room.on(JitsiConferenceEvents.TRACK_ADDED, track => onTrackAdded(track));
+    room.on(JitsiConferenceEvents.USER_LEFT, (id,user) => onParticipantLeft(id, user));
+
+
     setConferenceStatus(status.CONNECTED);
   };
 
   const onTrackAdded = track => {
     if (!track.isLocal() && track.getType() === 'video') {
       setVideoURL(track.stream.toURL());
+      setRemoteTracks([...remoteTracks,track]);
     } else if (track.isLocal() && track.getType() === 'video') {
       setLocalVideoURL(track.stream.toURL());
+      setLocalTracks([...localTracks,track]);
+
     }
   };
 
+  const onParticipantLeft = (id, user) => {
+    setVideoURL(null);
+  }
+
   const onConferenceJoined = () => {
     console.log('conference joined', room.myUserId());
-    //
 
     JitsiMeetJS.createLocalTracks({
       devices: ['video', 'audio'],
@@ -164,7 +225,7 @@ const JitsiComponent = (props:JitsiComponentProps) => {
     //
     setTimeout(() => {
       room.setDisplayName(props.displayName);
-      // room.sendTextMessage('Hola, me he conectado!');
+      room.setSubject(props.roomName);
     }, 3000);
 
     console.log('CONNECTION', connection);
@@ -209,6 +270,9 @@ const JitsiComponent = (props:JitsiComponentProps) => {
             style={[StyleSheet.absoluteFill, Styles.remoteTrack]}
           />
         )}
+        {conferenceStatus === status.CONNECTED && !videoURL && (
+          <View style={[StyleSheet.absoluteFill, Styles.centered]}><Text>Waiting for participants..</Text></View>
+        )}
         {localVideoURL && (
           <RTCView
             streamURL={localVideoURL}
@@ -216,49 +280,8 @@ const JitsiComponent = (props:JitsiComponentProps) => {
             objectFit={'cover'}
           />
         )}
-        {conferenceStatus === status.CONNECTED && (
-          <>
-            <View style={[Styles.conferenceContainer,Styles.centered]}>
-              <View style={[Styles.conferenceInfo, Styles.centered]}>
-                <Text style={[Styles.white]}>{roomName}</Text>
-                <Text style={[Styles.white]}><Timer></Timer></Text>
-              </View>
-            </View>
-
-            <View style={Styles.buttonsArea}>
-
-
-              <Button
-                style={Styles.button}
-                onPress={disconnect}
-                title="Disconnect"
-                disabled={conferenceStatus === status.DISCONNECTED}
-              />
-              {/*<Button onPress={getTracks} title="Tracks" />*/}
-            </View>
-          </>
-
-        )}
-        {conferenceStatus === status.DISCONNECTED && (
-          <View style={[{flex: 1},Styles.centered]}>
-            <View style={[Styles.joinContainer,Styles.centered]}>
-              <Text>Enter Room ID</Text>
-              <TextInput
-                style={Styles.textInput}
-                onChangeText={setRoomId}
-                placeholder="room id"
-                placeholderTextColor="gray"
-                value={roomId}
-              />
-              <Pressable style={Styles.button} onPress={connect} disabled={
-                conferenceStatus === status.CONNECTING ||
-                conferenceStatus === status.CONNECTED
-              }>
-                <Text style={Styles.buttonText}>Join</Text>
-              </Pressable>
-            </View>
-          </View>
-        )}
+        {conferenceStatus === status.CONNECTED && renderInConference() }
+        {conferenceStatus === status.DISCONNECTED && renderConnectWindow() }
       </View>
 
     </>

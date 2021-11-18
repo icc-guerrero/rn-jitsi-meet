@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Text} from 'react-native';
 
 
 const Timer = () => {

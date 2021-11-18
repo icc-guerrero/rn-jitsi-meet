@@ -30,11 +30,12 @@ const Styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 20,
-    backgroundColor: '#000000BB',
+    bottom: 10,
+    left: 10,
+    right: 10,
+    padding: 15,
+    backgroundColor: '#00000099',
+    borderRadius:20
   },
   button: {
     alignItems: 'center',
@@ -44,6 +45,19 @@ const Styles = StyleSheet.create({
     borderRadius: 4,
     elevation: 3,
     backgroundColor: 'blue',
+  },
+  roundButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 42,
+    marginHorizontal:10
+  },
+  leaveButton: {
+    paddingVertical: 18,
+    paddingHorizontal: 18,
+    backgroundColor: 'red'
   },
   buttonText: {
     fontSize: 16,
@@ -60,7 +74,7 @@ const Styles = StyleSheet.create({
   },
   localTrack: {
     backgroundColor: 'white',
-    top: 95,
+    bottom: 95,
     right: 20,
     zIndex: 99,
     width: 100,
